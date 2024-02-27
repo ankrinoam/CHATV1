@@ -16,7 +16,7 @@ client = None
 client = openai.OpenAI(api_key=openai_api_key)
 assistant_id = st.secrets["assistant_id"]
 instructions = ""
-assistant_title = "J-Active DEMO"
+assistant_title = "Outil Time2Pitch"
 enabled_file_upload_message =""
 
 
@@ -219,7 +219,7 @@ def disable_form():
 def main():
     st.title(assistant_title)
     st.markdown("[by Updev Solutions](https://updev-solutions.com)", unsafe_allow_html=True)
-    st.info("This assistant is designed to help you provide accurate and diplomatic responses to misinformed comments on social media regarding the Israeli-Palestinian conflict. Simply paste the comment into the chatbot, and it will offer you an informed and measured reply, based on facts from the PDF documents provided, to enlighten the discussion.")
+    st.info(" Cette outil vous permets de crée un pitch sur mesure a partir de la methode W")
     user_msg = st.chat_input(
         "Message", on_submit=disable_form, disabled=st.session_state.in_progress
     )
