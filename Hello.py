@@ -238,8 +238,11 @@ def main():
     st.write(defini)
     st.markdown("[by Updev Solutions](https://updev-solutions.com)", unsafe_allow_html=True)
     st.info(" Cette outil vous permets de crée un pitch sur mesure a partir de la methode W")
-    user_msg = st.chat_input(
-        "Message", on_submit=disable_form, disabled=st.session_state.in_progress
+
+    
+    
+    user_msg = st.chat_input("Message", key=f"user_message_{st.session_state.current_question_index}", 
+    on_submit=disable_form, disabled=st.session_state.in_progress
     )
     if enabled_file_upload_message:
         uploaded_file = st.sidebar.file_uploader(
