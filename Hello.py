@@ -216,10 +216,34 @@ def disable_form():
     st.session_state.in_progress = True
 
 
+# Add this at the top of your script
+predefined_questions = [
+    "What is your name?",
+    "How old are you?",
+    "What is your favorite color?",
+    # Add more questions as needed
+]
+
+# Modify your main function like this
 def main():
     st.title(assistant_title)
     st.markdown("[by Updev Solutions](https://updev-solutions.com)", unsafe_allow_html=True)
     st.info("This assistant is designed to help you provide accurate and diplomatic responses to misinformed comments on social media regarding the Israeli-Palestinian conflict. Simply paste the comment into the chatbot, and it will offer you an informed and measured reply, based on facts from the PDF documents provided, to enlighten the discussion.")
+
+    # Check if this is the first interaction
+    if 'first_interaction' not in st.session_state:
+        st.session_state.first_interaction = True
+
+    # If it's the first interaction, ask a predefined question
+    if st.session_state.first_interaction:
+        question = predefined_questions.pop(0)
+        with st.chat_message("Assistant"):
+            st.markdown(question, True)
+        st.session_state.chat_log.append({"name": "assistant", "msg": question})
+        st.session_state.first_interaction = False
+        st.session_state.in_progress = False
+        st.rerun()
+
     user_msg = st.chat_input(
         "Message", on_submit=disable_form, disabled=st.session_state.in_progress
     )
@@ -260,7 +284,6 @@ def main():
         st.session_state.tool_call = None
         st.rerun()
     render_chat()
-
 
 if __name__ == "__main__":
     main()
