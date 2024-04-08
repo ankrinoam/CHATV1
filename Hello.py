@@ -11,10 +11,10 @@ from tools import TOOL_MAP
 
 
 
-openai_api_key = st.secrets["openaikey"]
+
 client = None
-client = openai.OpenAI(api_key=openai_api_key)
-assistant_id = st.secrets["assistant_id"]
+client = openai.OpenAI(st.secrets['openaikey'])
+assistant_id = st.secrets['assistant_id']
 instructions = ""
 assistant_title = "Outil Time2Pitch"
 enabled_file_upload_message =""
@@ -214,10 +214,43 @@ if "in_progress" not in st.session_state:
 
 def disable_form():
     st.session_state.in_progress = True
+if "predefined_questions" not in st.session_state:
+  st.session_state.predefined_questions = [
+      "A. L’enjeu de votre projet: Définissez l’enjeu du marché.",
+      "B1. La taille du marché: Quel est votre chiffre clé ?",
+      # Ajoutez ici le reste de vos questions
+  ]
+  st.session_state.current_question_index = 0  # Suivi de la question actuelle
 
+def ask_predefined_question():
+  """Pose la question prédéfinie suivante."""
+  if st.session_state.current_question_index < len(st.session_state.predefined_questions):
+      question = st.session_state.predefined_questions[st.session_state.current_question_index]
+      st.session_state.current_question_index += 1
+      return question
+  else:
+      return None
 
 def main():
     st.title(assistant_title)
+    if "chat_log" not in st.session_state:
+      st.session_state.chat_log = []
+
+    if len(st.session_state.chat_log) == 0:
+      # Si aucune interaction n'a eu lieu, commencez par les questions prédéfinies
+      predefined_question = ask_predefined_question()
+      if predefined_question:
+          # Simulez une entrée utilisateur avec la question prédéfinie
+          user_msg = predefined_question
+      else:
+          user_msg = st.chat_input(
+              "Message", on_submit=disable_form, disabled=st.session_state.in_progress
+          )
+    else:
+      user_msg = st.chat_input(
+          "Message", on_submit=disable_form, disabled=st.session_state.in_progress
+      )
+
     st.markdown("[by Updev Solutions](https://updev-solutions.com)", unsafe_allow_html=True)
     st.info(" Cette outil vous permets de crée un pitch sur mesure a partir de la methode W")
     user_msg = st.chat_input(
