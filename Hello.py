@@ -233,6 +233,23 @@ def ask_predefined_question():
 
 def main():
     st.title(assistant_title)
+    if "chat_log" not in st.session_state:
+        st.session_state.chat_log = []
+
+    if len(st.session_state.chat_log) == 0:
+        # Si aucune interaction n'a eu lieu, commencez par les questions prédéfinies
+        predefined_question = ask_predefined_question()
+        if predefined_question:
+            # Simulez une entrée utilisateur avec la question prédéfinie
+            user_msg = predefined_question
+        else:
+            user_msg = st.chat_input(
+                "Message", on_submit=disable_form, disabled=st.session_state.in_progress
+            )
+    else:
+        user_msg = st.chat_input(
+            "Message", on_submit=disable_form, disabled=st.session_state.in_progress
+        )
     st.markdown("[by Updev Solutions](https://updev-solutions.com)", unsafe_allow_html=True)
     st.info(" Cette outil vous permets de crée un pitch sur mesure a partir de la methode W")
     user_msg = st.chat_input("Message", key=f"user_message_{st.session_state.current_question_index}", 
