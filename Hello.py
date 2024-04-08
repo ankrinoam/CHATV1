@@ -10,11 +10,11 @@ from openai.types.beta.threads import MessageContentImageFile
 from tools import TOOL_MAP
 
 
-
-
+openai_api_key = st.secrets["openaikey"]
 client = None
-client = openai.OpenAI(st.secrets['openaikey'])
-assistant_id = st.secrets['assistant_id']
+client = openai.OpenAI(api_key=openai_api_key)
+assistant_id = st.secrets["assistant_id"]
+
 instructions = ""
 assistant_title = "Outil Time2Pitch"
 enabled_file_upload_message =""
